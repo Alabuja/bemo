@@ -13,10 +13,10 @@ class SettingPageTableSeeder extends Seeder
     {
         DB::table('settings')->insert([
             [
-                'email_address' => 'jennifer@bemoacademicconsulting.com',
+                'email_address' => 'jennifer@bemoa.com',
             ],
             [
-                'email_address' => 'careers@bemoacademicconsulting.com',
+                'email_address' => 'note@bemoa.com',
             ]
         ]);
     }

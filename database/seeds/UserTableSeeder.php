@@ -13,10 +13,10 @@ class UserTableSeeder extends Seeder
     {
         DB::table('users')->insert([
             [
-                'email' => 'jennifer@bemoacademicconsulting.com',
+                'email' => 'jennifer@bemoa.com',
             ],
             [
-                'email' => 'careers@bemoacademicconsulting.com',
+                'email' => 'note@bemoa.com',
             ]
         ]);
     }
