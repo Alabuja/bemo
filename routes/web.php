@@ -29,7 +29,9 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/pages','AdminController@getPages'); 
     Route::get('/pages/{id}','AdminController@getPage'); 
     Route::get('/settings','AdminController@getSetting'); 
-    Route::post('/settings','SettingController@updateSetting'); 
-    Route::post('/pages/{id}','PageController@updatePage'); 
+    Route::post('/settings','SettingController@updateSetting');
+    Route::post('/settings/logo','SettingController@updateLogoImage');
+    Route::post('/pages/{id}','PageController@updatePage');
+    Route::post('/pages/{id}/banner','PageController@updatePageBanner');
     Route::post('/pages/index/{id}','PageController@updateIndexStatus');
 });
