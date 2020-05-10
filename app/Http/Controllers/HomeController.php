@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Setting;
 use App\Page;
+use App\Http\Requests\ContactFormRequest;
 
 class HomeController extends Controller
 {
@@ -49,14 +50,8 @@ class HomeController extends Controller
         return view('contact', compact('setting', 'page', 'pages'));
     }
 
-    public function sendContactForm(Request $request)
+    public function sendContactForm(ContactFormRequest $request)
     {
-        $this->validate($request, [
-            'email'                 => 'required|email|max:255',
-            'name'                  => 'required|string|max:255',
-            'description'           => 'required'
-        ]);
-
         DB::transaction(function () use ($request)    {
             
             $messages = [

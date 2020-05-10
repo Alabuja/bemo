@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use App\Page;
 use File;
+use App\Http\Requests\PageRequest;
+use App\Http\Requests\PageBannerRequest;
 
 class PageController extends Controller
 {
@@ -22,29 +24,43 @@ class PageController extends Controller
         $this->page                 = $page;
     }
 
-    public function updatePage(Request $request, $id)
+    public function updatePage(PageRequest $request, $id)
     {
-        $this->validate($request, [
-            'page_name'                 => 'required|string|max:255',
-            'page_meta_description'     => 'nullable',
-            'page_meta_title'           => 'nullable',
-            'page_details'              => 'nullable',
-            'page_summary'              => 'nullable',
-            'page_header'               => 'nullable',
-            'page_image_url'            => 'nullable|mimes:jpeg,jpg,png|max:2048'
-        ]);
-
         $pageName = $request->page_name;
         $pageMetaDescription = $request->page_meta_description;
         $pageMetaTitle = $request->page_meta_title;
         $pageDetails = $request->page_details;
         $pageSummary = $request->page_summary;
         $pageHeader = $request->page_header;
-        $pageImage = "";
 
-        $file = $request->file('page_image_url');
+        
+        $updatedValue = Page::where('id', $id)
+                                ->update([
+                                    'page_name' => $pageName,
+                                    'page_meta_description' => $pageMetaDescription,
+                                    'page_meta_title' => $pageMetaTitle,
+                                    'page_details' => $pageDetails,
+                                    'page_summary' => $pageSummary,
+                                    'page_header' => $pageHeader
+                                ]);
+        
+        if($updatedValue)
+        {
+            $request->session()->flash('success', 'Page Updated Successfully!');
+        }
+        else
+        {
+            $request->session()->flash('danger', 'Page Not Updated!');
+        }
+        
+        return back();
+    }
+
+    public function updatePageBanner(PageBannerRequest $request, $id)
+    {
         if($request->hasFile('page_image_url'))
         {
+            $file = $request->file('page_image_url');
             $ext = $file->getClientOriginalExtension();
 
             $time = time();
@@ -61,30 +77,28 @@ class PageController extends Controller
 
                 File::delete($path);
             }
-        }
-        
-        
-        $updatedValue = Page::where('id', $id)
+
+            $updatedValue = Page::where('id', $id)
                                 ->update([
-                                    'page_name' => $pageName,
-                                    'page_meta_description' => $pageMetaDescription,
-                                    'page_meta_title' => $pageMetaTitle,
-                                    'page_details' => $pageDetails,
-                                    'page_summary' => $pageSummary,
-                                    'page_header' => $pageHeader,
                                     'page_image_url' => $pageImage
                                 ]);
         
-        if($updatedValue)
-        {
-            $request->session()->flash('success', 'Page Updated Successfully!');
+            if($updatedValue)
+            {
+                $request->session()->flash('success', 'Page Updated Successfully!');
+            }
+            else
+            {
+                $request->session()->flash('danger', 'Page Not Updated!');
+            }
+            
+            return back();
         }
         else
         {
-            $request->session()->flash('danger', 'Page Not Updated!');
+            $request->session()->flash('danger', 'No Image!');
+            return back();
         }
-        
-        return back();
     }
 
     public function updateIndexStatus(Request $request, $id)

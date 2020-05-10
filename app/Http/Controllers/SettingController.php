@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Setting;
 use File;
+use App\Http\Requests\SettingRequest;
+use App\Http\Requests\LogoImageRequest;
 
 class SettingController extends Controller
 {
@@ -21,28 +23,40 @@ class SettingController extends Controller
         $this->setting                 = $setting;
     }
 
-    public function updateSetting(Request $request)
+    public function updateSetting(SettingRequest $request)
     {
-        $this->validate($request, [
-            'email_address'                 => 'nullable|email|max:255',
-            'facebook_advertising_pixel'    => 'nullable',
-            'google_analytics'              => 'nullable',
-            'facebook_url'                  => 'nullable',
-            'twitter_url'                   => 'nullable',
-            'logo_image_url'                => 'nullable|mimes:jpeg,jpg,png|max:2048'
-        ]);
-
         $emailAddress = $request->email_address;
         $facebookAdvertisingPixel = $request->facebook_advertising_pixel;
         $googleAnalytics = $request->google_analytics;
         $facebookUrl = $request->facebook_url;
         $twitterUrl = $request->twitter_url;
 
-        $logoImageUrl = "";
+        $updatedValue = Setting::first()
+                                ->update([
+                                    'email_address' => $emailAddress,
+                                    'facebook_advertising_pixel' => $facebookAdvertisingPixel,
+                                    'google_analytics' => $googleAnalytics,
+                                    'facebook_url' => $facebookUrl,
+                                    'twitter_url' => $twitterUrl
+                                ]);
+        
+        if($updatedValue)
+        {
+            $request->session()->flash('success', 'Settings Updated Successfully!');
+        }
+        else
+        {
+            $request->session()->flash('danger', 'Settings Not Updated!');
+        }
+        
+        return back();
+    }
 
-        $file = $request->file('logo_image_url');
+    public function updateLogoImage(LogoImageRequest $request)
+    {
         if($request->hasFile('logo_image_url'))
         {
+            $file = $request->file('logo_image_url');
             $ext = $file->getClientOriginalExtension();
 
             $time = time();
@@ -60,28 +74,26 @@ class SettingController extends Controller
                 File::delete($path);
             }
 
-            // Go to the public folder to delete img with this timestamp.
-        }
-        
-        $updatedValue = Setting::first()
+            $updatedValue = Setting::first()
                                 ->update([
-                                    'email_address' => $emailAddress,
-                                    'facebook_advertising_pixel' => $facebookAdvertisingPixel,
-                                    'google_analytics' => $googleAnalytics,
-                                    'facebook_url' => $facebookUrl,
-                                    'twitter_url' => $twitterUrl,
                                     'logo_image_url' => $logoImageUrl
                                 ]);
         
-        if($updatedValue)
-        {
-            $request->session()->flash('success', 'Settings Updated Successfully!');
+            if($updatedValue)
+            {
+                $request->session()->flash('success', 'Logo Updated Successfully!');
+            }
+            else
+            {
+                $request->session()->flash('danger', 'Logo Not Updated!');
+            }
+
+            return back();
         }
         else
         {
-            $request->session()->flash('danger', 'Settings Not Updated!');
+            $request->session()->flash('danger', 'No Image!');
+            return back();
         }
-        
-        return back();
     }
 }
