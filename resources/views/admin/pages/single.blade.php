@@ -23,11 +23,11 @@
             </h6>
         </div>
         <div class="card-body">
-            <form method="POST" action="{{url('admin/pages/'. $page->id)}}" enctype="multipart/form-data">
+            <form method="POST" action="{{url('admin/pages/'. $page->id)}}">
                 @csrf
 
                 <div class="form-group row col-md-12">
-                    <div class="col-md-4 required">
+                    <div class="col-md-6 required">
                         <label for="page_name" class="col-form-label text-md-right">{{ __('Page Name') }}</label>
                         <input id="page_name" type="text" class="form-control{{ $errors->has('page_name') ? ' is-invalid' : '' }}" name="page_name" value="{{ $page->page_name }}" required autofocus>
 
@@ -37,15 +37,9 @@
                             </span>
                         @endif
                     </div>
-
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <label for="page_meta_title" class="col-form-label text-md-right">{{ __('Meta Title') }}</label>
                         <input id="page_meta_title" type="text" class="form-control" name="page_meta_title" value="{{ $page->page_meta_title  }}" >
-                    </div>
-
-                    <div class="col-md-4">
-                        <label for="page_header" class="col-form-label text-md-right">{{ __('Page Header Text') }}</label>
-                        <input id="page_header" type="text" class="form-control" name="page_header" value="{{ $page->page_header  }}"  >
                     </div>
                 </div>
 
@@ -55,27 +49,44 @@
 
                         <textarea id="page_meta_description" name="page_meta_description" class="form-control" rows="6" placeholder="Page Description"> {{ $page->page_meta_description }}</textarea>
                     </div>
-
                     <div class="col-md-6">
-                        <label for="page_details_summernote" class="col-form-label text-md-right">{{ __('Page Details') }}</label>
-
-                        <textarea id="page_details_summernote" name="page_details" class="form-control"> {!! $page->page_details !!}</textarea>
+                        <label for="page_header" class="col-form-label text-md-right">{{ __('Page Header Text') }}</label>
+                        <input id="page_header" type="text" class="form-control" name="page_header" value="{{ $page->page_header  }}"  >
                     </div>
-
                 </div>
 
                 <div class="form-group row col-md-12">
-				    <div class="col-md-6">
-                        <label for="page_image_url" class="col-form-label text-md-right">{{ __('Page Image') }}</label>
-				        <input id="page_image_url" type="file" class="form-control" name="page_image_url">
-				    </div>
-
                     <div class="col-md-6">
                         <label for="page_summary_summernote" class="col-form-label text-md-right">{{ __('Page Summary') }}</label>
 
                         <textarea id="page_summary_summernote" name="page_summary" class="form-control"> {!! $page->page_summary !!}</textarea>
                     </div>
+                    <div class="col-md-6">
+                        <label for="page_details_summernote" class="col-form-label text-md-right">{{ __('Page Details') }}</label>
 
+                        <textarea id="page_details_summernote" name="page_details" class="form-control"> {!! $page->page_details !!}</textarea>
+                    </div>
+                </div>
+                
+                <div class="form-group row mb-0">
+                    <div class="col-md-6 offset-md-4">
+                        <button type="submit" class="btn btn-primary" id="btnUpdatePage">
+                            {{ __('Update Page') }}
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <form method="POST" action="{{url('admin/pages/'. $page->id. '/banner')}}" enctype="multipart/form-data">
+                @csrf
+
+                <div class="form-group row col-md-12 required">
+                    <label for="page_image_url" class="col-form-label text-md-right">{{ __('Page Page Banner') }}</label>
+				    <input id="page_image_url" type="file" class="form-control" name="page_image_url" required>
                 </div>
 
                 @if(!empty($page->page_image_url))
@@ -89,7 +100,7 @@
                 <div class="form-group row mb-0">
                     <div class="col-md-6 offset-md-4">
                         <button type="submit" class="btn btn-primary" id="btnUpdatePage">
-                            {{ __('Update Page') }}
+                            {{ __('Update Page Banner') }}
                         </button>
                     </div>
                 </div>

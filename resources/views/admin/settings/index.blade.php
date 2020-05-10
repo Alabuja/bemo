@@ -19,7 +19,7 @@
             </h6>
         </div>
         <div class="card-body">
-            <form method="POST" action="{{url('admin/settings/')}}" enctype="multipart/form-data">
+            <form method="POST" action="{{url('admin/settings/')}}">
                 @csrf
 
                 <div class="form-group row col-md-12">
@@ -40,22 +40,37 @@
                 </div>
 
                 <div class="form-group row col-md-12">
-	                <div class="col-md-4">
-                        <label for="facebook_advertising_pixel" class="col-md-4 col-form-label text-md-right">{{ __('Facebook Advertising Pixel') }}</label>
+	                <div class="col-md-6">
+                        <label for="facebook_advertising_pixel" class="col-form-label text-md-right">{{ __('Facebook Advertising Pixel') }}</label>
 
                         <textarea id="facebook_advertising_pixel" name="facebook_advertising_pixel" class="form-control" rows="6"> {{ $setting->facebook_advertising_pixel }}</textarea>
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <label for="twitter_url" class="col-form-label text-md-right">{{ __('Twitter URL') }}</label>
                         <input id="twitter_url" type="text" class="form-control" name="twitter_url" value="{{ $setting->twitter_url }}"  >
                     </div>
+                </div>
 
-                    <div class="col-md-4">
-                        <label for="logo_image_url" class="col-form-label text-md-right">{{ __('Logo') }}</label>
-				        <input id="logo_image_url" type="file" class="form-control" name="logo_image_url">
-				    </div>
+                <div class="form-group row mb-0">
+                    <div class="col-md-6 offset-md-4">
+                        <button type="submit" class="btn btn-primary" id="btnUpdateSetting">
+                            {{ __('Update Setting') }}
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <form method="POST" action="{{url('admin/settings/logo')}}" enctype="multipart/form-data">
+                @csrf
+
+                <div class="form-group row col-md-12 required">
+                    <label for="logo_image_url" class="col-form-label text-md-right">{{ __('Logo') }}</label>
+				    <input id="logo_image_url" type="file" class="form-control" name="logo_image_url" required>
                 </div>
 
                 @if(!empty($setting->logo_image_url))
@@ -68,8 +83,8 @@
 
                 <div class="form-group row mb-0">
                     <div class="col-md-6 offset-md-4">
-                        <button type="submit" class="btn btn-primary" id="btnUpdateSetting">
-                            {{ __('Update Setting') }}
+                        <button type="submit" class="btn btn-primary" id="btnUpdateLogo">
+                            {{ __('Change Logo') }}
                         </button>
                     </div>
                 </div>
